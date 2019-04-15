@@ -4,6 +4,11 @@
  #### 对接准备：管理员分配 appId appSecret
  #### 接口地址：https://yliao.com/api/oauth
  #### 接口方式：POST（application/x-www-form-urlencoded）
+ #### 跳转地址：http://yliao.com/oAuth?token=接口返回的token值
+ -----------------------------------------------
+ #### 测试地址：http://183.129.242.178:8009/api/oauth
+ #### 测试跳转地址：http://183.129.242.178:8010/oAuth?token=接口返回的token值
+
 
 | 参数 | 类型 |描述 |
 | ---- | ---- | ---- |
