@@ -27,19 +27,20 @@
 | sign | String |  请求签名（签名方式:MD5） |
 
  #### 签名方式：以上字段除去sign，按照参数名的字典顺序排列，以如下形式拼接成字符串，然后加上appSecret字符串，将整个字符串MD5得到sign。
- ```
+  ```
  [appId=1111166059554922498]
  [appSecret=1234567890]
  
  1.字典排列
- amount=30000&appId=1111166059554922498&identity=330823XXXXXXXX2115&mobile=137XXXX9882&name=王XX
+ amount=30000&appId=1111166059554922498&identity=330823********2115&mobile=137****9882&name=王**
  
  2.加上appSecret
- amount=30000&appId=1111166059554922498&identity=330823XXXXXXXX2115&mobile=137XXXX9882&name=王XX1234567890
+ amount=30000&appId=1111166059554922498&identity=330823********2115&mobile=137****9882&name=王**1234567890
  
  3.最后MD5
  sign=9aa9c188d2e10c73a3638dc1df495002
  ```
+ 
  #### JAVA签名示例代码：
  ```
     public String getSignContent(Map<String, String> params) {
@@ -60,4 +61,19 @@
     }
     
     String sign = DigestUtil.md5Hex(this.getSignContent(PARAMS_MAP) + APP_SECRET);
+ ```
+ #### 返回成功示例：
+ ```
+ {
+   "code": 1,
+   "msg": "操作成功",
+   "data": "D2C-$2a$10$iWwxYtpyqtpp8KlFMh9tnOSYfwnvvA9cWMl6J0LO5ULHHygwJRWbK"
+ }
+ ```
+ #### 返回失败示例：
+ ```
+ {
+   "code": -1,
+   "msg": "appId不正确，请仔细检查" / "签名不正确，请仔细检查"
+ }
  ```
