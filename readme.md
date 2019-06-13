@@ -77,3 +77,64 @@
    "msg": "appId不正确，请仔细检查" / "签名不正确，请仔细检查"
  }
  ```
+ 
+ 
+ ## P2P平台订单通知接口
+ 
+ #### 对接准备：需先在有料网管理后台配置通知地址
+ 
+ #### 请求参数：
+ 
+| 参数 | 类型 |描述 |
+| ---- | ---- | ---- |
+| orderNo | String | 订单编号 |
+| orderTime | String |  订单创建时间（yyyy-MM-dd HH:mm:ss） |
+| orderAmount | float |  实际支付（单位:元）  |
+| limitAmount | float |  授权金额（单位:元） |
+| freightAmount | float |  运费价格（单位:元） |
+| realName | String |  用户姓名 |
+| phone | String |  手机号 |
+| address | String |  收货地址 |
+| totalPrice | float |  商品总价（单位:元） |
+| orderDetail | String |  商品明细（JSONArray字符串 结构看下表） |
+| sign | String |  签名（签名方式与授权接口相同 推荐自行校验） |
+
+#### 商品明细 orderDetail
+| 参数 | 类型 |描述 |
+| ---- | ---- | ---- |
+| goodsName | String | 商品名称 |
+| skuNo | String |  商品编码 |
+| quantity | int |  下单数量  |
+| price | float |  商品单价  |
+
+#### JAVA通知接收接口示例
+```
+public JSONObject callYLiao(HttpServletRequest request, HttpResponse response) {
+        Map<String, String[]> map = new HashMap<String,String[]>(request.getParameterMap());
+        Map<String,String> params=new HashMap<>();
+        //Map<String, String[]>里的数据转为Map<String,String>
+        map.forEach((k,v)->params.put(k,v[0]));
+        //验证签名
+        String sign=params.get("sign");
+        String signContent=getSignContent(params);
+        String signature = DigestUtil.md5Hex(signContent + APP_SECRET);
+        if(sign.equalsIgnoreCase(signature)){
+            //业务代码
+        }
+        //返回结果
+        JSONObject resp=new JSONObject();
+        resp.put("code",100);
+        return resp;
+    }
+```
+
+ #### 返回成功示例：
+ ```
+ {
+   "code": 100
+ }
+ ```
+ #### 返回失败示例：
+ 
+ 除了成功之外，其他结果均认为是失败，失败不会重新通知，失败后可以通过有料网后台对对应的订单重新发送通知。
+
